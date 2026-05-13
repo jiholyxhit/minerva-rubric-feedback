@@ -1,23 +1,35 @@
 {
   "name": "minerva-rubric-feedback",
-  "version": "1.0.0",
-  "description": "Claude Code skill for structured rubric (HC/LO) feedback on Minerva University assignments",
+  "version": "2.0.0",
+  "description": "Cross-platform AI plugin for structured rubric (HC/LO) feedback on Minerva assignments. Supports Claude Code, Cursor, Codex, and Gemini CLI with multi-agent discipline evaluation and Google Drive integration.",
   "bin": {
     "minerva-rubric-feedback": "./bin/install.js"
   },
   "files": [
     "bin/",
     ".claude/",
-    "scripts/"
+    ".cursor/",
+    "scripts/",
+    "AGENTS.md",
+    "GEMINI.md",
+    "CLAUDE.md"
   ],
   "keywords": [
     "minerva",
     "claude-code",
+    "cursor",
+    "codex",
+    "gemini",
     "rubric",
     "feedback",
     "hc",
     "learning-outcomes",
-    "skill"
+    "skill",
+    "plugin",
+    "multi-agent",
+    "google-drive",
+    "mcp",
+    "superpowers-plugin"
   ],
   "license": "MIT",
   "engines": {

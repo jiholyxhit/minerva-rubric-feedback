@@ -1,0 +1,6 @@
+{
+  "name": "minerva-rubric-feedback",
+  "description": "Structured rubric (HC/LO) feedback for Minerva assignments with multi-agent discipline evaluation and Google Drive integration",
+  "version": "2.0.0",
+  "contextFileName": "GEMINI.md"
+}
