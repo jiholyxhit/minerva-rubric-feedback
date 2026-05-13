@@ -54,32 +54,62 @@ claude
 
 ```
 /rubric-feedback
-/rubric-feedback audience,thesis
+/rubric-feedback audience,thesis,levelsofanalysis
 /rubric-feedback https://docs.google.com/document/d/<id>/edit
-/rubric-feedback "Week 6 Policy Essay" audience
-/rubric-feedback https://forum.minerva.edu/app/assignment-grader/<id>
+/rubric-feedback https://docs.google.com/document/d/<id>/edit https://forum.minerva.edu/app/assignment-grader/<id>
+/rubric-feedback "Week 6 Policy Essay"
+/rubric-feedback "Week 6 Policy Essay" https://forum.minerva.edu/app/assignment-grader/<id>
 ```
 
 ### Cursor
 
 ```
 @rubric-feedback
-@rubric-feedback audience,thesis
+@rubric-feedback audience,thesis,levelsofanalysis
 @rubric-feedback https://docs.google.com/document/d/<id>/edit
+@rubric-feedback https://docs.google.com/document/d/<id>/edit https://forum.minerva.edu/app/assignment-grader/<id>
+@rubric-feedback "Week 6 Policy Essay"
+@rubric-feedback "Week 6 Policy Essay" https://forum.minerva.edu/app/assignment-grader/<id>
 ```
 
 ### Codex / Gemini CLI
 
 ```
 rubric-feedback
-rubric-feedback audience,thesis
+rubric-feedback audience,thesis,levelsofanalysis
+rubric-feedback https://docs.google.com/document/d/<id>/edit
+rubric-feedback https://docs.google.com/document/d/<id>/edit https://forum.minerva.edu/app/assignment-grader/<id>
 rubric-feedback "Week 6 Policy Essay"
+rubric-feedback "Week 6 Policy Essay" https://forum.minerva.edu/app/assignment-grader/<id>
 ```
 
 ---
 
 ## Architecture
 
+**Claude Code**
+```
+Assignment (local PDF or Google Drive)
+        │
+        ├── [Hook] Grammar  (Haiku) ─── fires before skill, async
+        ├── [Hook] Typo     (Haiku) ─── fires before skill, async
+        │
+        ├── Step 2: Scrape past professor feedback (Minerva URLs → Playwright)
+        │
+        ├── Steps 3–6: Read assignment, detect #rubric tags, load rubric definitions
+        │             + load professor feedback
+        │
+        └── Step 7: 4 parallel subagents
+                ├── AH Agent   (Sonnet) — Arts & Humanities HCs
+                ├── CS Agent   (Sonnet) — Computational Sciences HCs
+                ├── NS Agent   (Sonnet) — Natural Sciences HCs
+                └── SS Agent   (Sonnet) — Social Sciences HCs
+                        │
+                        └── Coordinator (Sonnet) → unified CLI output
+                              (merges discipline results + hook grammar/typo output)
+```
+
+**Cursor / Codex / Gemini CLI**
 ```
 Assignment (local PDF or Google Drive)
         │
@@ -88,15 +118,15 @@ Assignment (local PDF or Google Drive)
         ├── Steps 3–6: Read assignment, detect #rubric tags, load rubric definitions
         │             + load professor feedback
         │
-        └── Step 7: 6 parallel agents
-                ├── SS Agent   (Sonnet) — Social Science HCs
-                ├── AH Agent   (Sonnet) — Art & History HCs
-                ├── CS Agent   (Sonnet) — Computer Science HCs
-                ├── NS Agent   (Sonnet) — Natural Science HCs
-                ├── Grammar    (Haiku)  — grammar errors
-                └── Typo       (Haiku)  — typos & spelling
+        └── Step 7: 6 parallel subagents
+                ├── AH Agent   (Sonnet / Pro)  — Arts & Humanities HCs
+                ├── CS Agent   (Sonnet / Pro)  — Computational Sciences HCs
+                ├── NS Agent   (Sonnet / Pro)  — Natural Sciences HCs
+                ├── SS Agent   (Sonnet / Pro)  — Social Sciences HCs
+                ├── Grammar    (Haiku / Flash) — grammar errors
+                └── Typo       (Haiku / Flash) — typos & spelling
                         │
-                        └── Coordinator (Sonnet) → unified CLI output
+                        └── Coordinator (Sonnet / Pro) → unified CLI output
 ```
 
 ---
@@ -122,19 +152,20 @@ Authenticate Google Drive MCP to read assignments from Drive:
 
 ## Supported rubrics
 
-**Cross-disciplinary:**
+**Cross-disciplinary (M100)**
+`#audience` `#thesis` `#composition` `#connotation` `#constraints` `#levelsofanalysis` `#purpose`
 
-| Tag | Description |
-|-----|-------------|
-| `#audience` | Tailor work to the situation and perspective of the receiver |
-| `#thesis` | Formulate a well-defined, arguable, and specific thesis |
-| `#composition` | Communicate with a clear, precise, parsimonious style |
-| `#connotation` | Understand and deliberately use connotations and tone |
-| `#constraints` | Identify and apply constraint satisfaction to solve problems |
-| `#levelsofanalysis` | Analyze a complex system across multiple levels and interactions |
-| `#purpose` | Articulate a mission that connects values, goals, and procedures |
+**AH — Arts & Humanities**
+`#persuasion` `#multimedia` `#designthinking` `#context` `#critique` `#interpretivelens` `#evidencebased` `#sourcequality` `#organization` `#professionalism` `#communicationdesign` `#expression` `#medium`
 
-**Discipline-specific:** defined in `references/rubrics/hc_*.md`
+**CS — Computational Sciences**
+`#algorithms` `#optimization` `#confidenceintervals` `#correlation` `#descriptivestats` `#distributions` `#probability` `#regression` `#significance` `#decisiontrees` `#utility` `#gametheory` `#variables` `#deduction` `#fallacies` `#induction` `#estimation`
+
+**NS — Natural Sciences**
+`#dataviz` `#casestudy` `#comparisongroups` `#interventionalstudy` `#interviewsurvey` `#observationalstudy` `#sampling` `#studyreplication` `#hypothesisdevelopment` `#modeling` `#analogies` `#heuristics` `#scienceoflearning` `#biasidentification` `#biasmitigation` `#breakitdown` `#gapanalysis` `#rightproblem` `#plausibility` `#testability`
+
+**SS — Social Sciences**
+`#shapingbehavior` `#systemmapping` `#emergentproperties` `#complexcausality` `#networks` `#systemdynamics` `#negotiate` `#ethicalconsiderations` `#ethicalcourage` `#ethicaljudgment` `#conformity` `#differences` `#emotionaliq` `#leadprinciples` `#powerdynamics` `#responsibility` `#selfawareness` `#strategize` `#psychologicalexplanation`
 
 To add a new rubric: see [CONTRIBUTING.md](CONTRIBUTING.md).
 

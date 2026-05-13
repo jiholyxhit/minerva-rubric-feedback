@@ -1,6 +1,6 @@
 {
   "name": "minerva-rubric-feedback",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cross-platform AI plugin for structured rubric (HC/LO) feedback on Minerva assignments. Supports Claude Code, Cursor, Codex, and Gemini CLI with multi-agent discipline evaluation and Google Drive integration.",
   "bin": {
     "minerva-rubric-feedback": "bin/install.js"
