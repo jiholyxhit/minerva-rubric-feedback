@@ -12,7 +12,8 @@
     "scripts/",
     "AGENTS.md",
     "GEMINI.md",
-    "CLAUDE.md"
+    "CLAUDE.md",
+    "gemini-extension.json"
   ],
   "keywords": [
     "minerva",
